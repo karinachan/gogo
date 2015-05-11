@@ -17,7 +17,16 @@ func (b Board) toString() string{
 
 }
 
+func (b Board) setPiece(row int, col int, piece int) Board{
+  b[row][col] = piece; 
+   //   fmt.Println("board contents: \n", b.toString())
+  return b
+
+}
+
 func main() {
     b := Board{}
+    b = b.setPiece(1,1,1)
     fmt.Println("board contents: \n", b.toString())
+
 }
