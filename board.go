@@ -7,23 +7,23 @@ type Board[9][9]int
 type Turn[3]int
 
 func (b Board) toString() string{
-  str := "[  0 1 2 3 4 5 6 7 8 \n "
+  str := "    0 1 2 3 4 5 6 7 8 \n "
   for i, elem := range b {
-          if i > 0 {
-              str += " "
-          }
-          str += fmt.Sprint(i)
-          str += " "
-          str += fmt.Sprint(elem)
-          str += "\n"
-      }
-      return str + "]"
+    if i > 0 {
+      str += " "
+    }
+    str += fmt.Sprint(i)
+    str += " "
+    str += fmt.Sprint(elem)
+    str += "\n"
+  }
+  return str + "]"
 
 }
 
-func (b Board) setPiece(row int, col int, piece int) Board{
+
+func (b *Board) setPiece(row int, col int, piece int) {
   b[row][col] = piece
-  return b
 }
 
 func (b Board) getPiece(row int, col int) int {
@@ -36,6 +36,153 @@ func (t Turn) setTurn(row int, col int, piece int) Turn {
   t[2] = piece
   return t
 }
+
+
+func (b *Board) isCaptured(row int, col int, num int) bool {
+  captured := true
+  var val int
+
+  if row-1 >= 0 {
+    val = b[row-1][col];
+    if val==0 {
+      return false
+    }
+    if val==num {
+      b.setPiece(row, col, 3)
+      captured = b.isCaptured(row-1, col, num)
+    }
+    if val==3 {
+      b.setPiece(row-1, col, num)
+    }
+  }
+  if row+1 <= 8 {
+    val = b[row+1][col];
+    if val==0 {
+      return false
+    }
+    if val==num {
+      b.setPiece(row, col, 3)
+      captured = b.isCaptured(row+1, col, num)
+    }
+    if val==3 {
+      b.setPiece(row+1, col, num)
+    }
+  }
+  if col-1 >= 0 {
+    val = b[row][col-1];
+    if val==0 {
+      return false
+    }
+    if val==num {
+      b.setPiece(row, col, 3)
+      captured = b.isCaptured(row, col-1, num)
+    }
+    if val==3 {
+      b.setPiece(row, col-1, num)
+    }
+  }
+  if col+1 <= 8 {
+    val = b[row][col+1];
+    if val==0 {
+      return false
+    }
+    if val==num {
+      b.setPiece(row, col, 3)
+      captured = b.isCaptured(row, col+1, num)
+    }
+    if val==3 {
+      b.setPiece(row, col+1, num)
+    }
+  }
+
+  return captured
+}
+
+func (b *Board) checkCaptured(num int) bool {
+  for i := 0; i < len(b); i++ {
+    for j := 0; j < len(b[0]); j++ {
+      if b[i][j] == num {
+        if b.isCaptured(i, j, num) {
+          return true
+        }
+      }
+    } 
+  }
+  return false
+}
+
+
+func (b *Board) runGame() {
+  play := true
+  var row int
+  var col int
+  for play {
+
+    fmt.Println("Player 1 turn.")
+    fmt.Println("Enter row.")
+    fmt.Scanf("%d", &row)
+
+    fmt.Println("Enter column.")
+    fmt.Scanf("%d", &col)
+    b.setPiece(row, col, 1)
+    fmt.Println(b.toString())
+
+    if b.checkCaptured(2) {
+      fmt.Println("Game over. Player 1 wins!")
+      play = false
+      break 
+    }
+
+
+    fmt.Println("Player 2 turn.")
+    fmt.Println("Enter row.")
+    fmt.Scanf("%d", &row)
+    fmt.Println("Enter column.")
+    fmt.Scanf("%d", &col)
+    b.setPiece(row, col, 2)
+    fmt.Println(b.toString())
+
+    if b.checkCaptured(1) {
+      fmt.Println("Game over. Player 2 wins!")
+      play = false
+      break 
+    }
+
+
+  }
+
+}
+
+
+
+func main() {
+  fmt.Println("Welcome to Go!")
+  b := &Board{}
+  //  bp := &b
+  //b.setPiece(0,0,1)
+  //b.setPiece(0,1,2)
+  //b.setPiece(1,0,2)
+  /*  b.setPiece(2,2,1)
+    b.setPiece(2,1,2)
+    b.setPiece(1,2,2)
+    b.setPiece(2,3,1)
+    b.setPiece(3,2,2)
+    b.setPiece(1,3,2)
+    b.setPiece(3,3,2)
+    b.setPiece(2,4,2)*/
+  //  runGame(b)
+    b.runGame()
+
+/*    t := Turn{}
+    b = b.setPiece(2,2,1)
+    t = t.setTurn(2,2,1)
+    fmt.Println(fmt.Sprint(t))
+    b.isLoop(2,2,t)*/
+   // fmt.Println("board contents: \n", b.toString())
+   // fmt.Println(b.isCaptured(0,0,1))
+
+  }
+
 
 
   // if piece is row is 0 or 9 or col is 0 or 9 check 3
@@ -142,9 +289,9 @@ func (t Turn) setTurn(row int, col int, piece int) Turn {
 
         }
     }   
-  } */
+    } */
   //FLOODFILL
-  func (b Board) isLoop(row int, col int, t Turn, ) bool {
+/*  func (b Board) isLoop(row int, col int, t Turn, ) bool {
   var i = b.getPiece(row,col)
   if row == t[0] && col == t[1] && i == t[2] {
     //add to list of loops
@@ -174,16 +321,4 @@ func (t Turn) setTurn(row int, col int, piece int) Turn {
   }
 
   return true
-}
-
-
-
-func main() {
-    b := Board{}
-    t := Turn{}
-    b = b.setPiece(2,2,1)
-    t = t.setTurn(2,2,1)
-    fmt.Println(fmt.Sprint(t))
-    b.isLoop(2,2,t)
-    fmt.Println("board contents: \n", b.toString())
-}
+  }*/
