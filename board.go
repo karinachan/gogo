@@ -55,7 +55,7 @@ func (b *Board) isCaptured(row int, col int, num int) bool {
       b.setPiece(row-1, col, num)
     }
   }
-  if row+1 <= 8 {
+  if row+1 <= len(b)-1 {
     val = b[row+1][col];
     if val==0 {
       return false
@@ -81,7 +81,7 @@ func (b *Board) isCaptured(row int, col int, num int) bool {
       b.setPiece(row, col-1, num)
     }
   }
-  if col+1 <= 8 {
+  if col+1 <= len(b)-1 {
     val = b[row][col+1];
     if val==0 {
       return false
