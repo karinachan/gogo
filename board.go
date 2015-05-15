@@ -16,6 +16,7 @@ func (b Board) toString() string{
     str += " "
     str += fmt.Sprint(elem)
     str += "\n"
+    str += "\n"
   }
   return str + "]"
 
@@ -45,7 +46,7 @@ func (b *Board) isCaptured(row int, col int, num int) bool {
   if row-1 >= 0 {
     val = b[row-1][col];
     if val==0 {
-      return false
+      captured = false
     }
     if val==num {
       b.setPiece(row, col, 3)
@@ -55,10 +56,11 @@ func (b *Board) isCaptured(row int, col int, num int) bool {
       b.setPiece(row-1, col, num)
     }
   }
+
   if row+1 <= len(b)-1 {
     val = b[row+1][col];
     if val==0 {
-      return false
+      captured = false
     }
     if val==num {
       b.setPiece(row, col, 3)
@@ -68,10 +70,11 @@ func (b *Board) isCaptured(row int, col int, num int) bool {
       b.setPiece(row+1, col, num)
     }
   }
+
   if col-1 >= 0 {
     val = b[row][col-1];
     if val==0 {
-      return false
+      captured = false
     }
     if val==num {
       b.setPiece(row, col, 3)
@@ -81,10 +84,11 @@ func (b *Board) isCaptured(row int, col int, num int) bool {
       b.setPiece(row, col-1, num)
     }
   }
+
   if col+1 <= len(b)-1 {
     val = b[row][col+1];
     if val==0 {
-      return false
+      captured = false
     }
     if val==num {
       b.setPiece(row, col, 3)
