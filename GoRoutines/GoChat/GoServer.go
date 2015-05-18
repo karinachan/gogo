@@ -1,5 +1,4 @@
 /* GoCLient.go
- Author: Emery Otopalik
 
  Sources: 
  https://gist.github.com/drewolson/3950226
