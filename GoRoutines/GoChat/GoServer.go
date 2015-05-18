@@ -4,7 +4,7 @@
  Sources: 
  https://gist.github.com/drewolson/3950226
  https://www.socketloop.com/tutorials/golang-simple-client-server-example
- Basically just used sources to gather info on what packages to use/how to use.
+ Basically just used sources to gather info on what packages to use/how to use/syntax.
 
  This program creates a chat server that manages multiple clients. Input from clients
  is sent to the server, which in following sends the data to all clients.*/
@@ -49,7 +49,7 @@ func (goServer *GoServer) Add(conn net.Conn) {
 	//goClient.Run() 
 }
 
-// The data stored the server output channel is sent to each client output channel
+// The data stored in the server output channel is sent to each client.
 func (goServer *GoServer) Output(out string) {
 	for _, client := range goServer.goClients {	
 		client.output <- out
@@ -102,7 +102,7 @@ func (client *GoClient) Read() {
 // (from the server/other clients).
 func (client *GoClient) Write() {
 	for current := range client.output {
-		client.read_write.Writer.WriteString(current) /
+		client.read_write.Writer.WriteString(current) 
 		client.read_write.Writer.Flush() // flushes any buffering output
 	}
 }
@@ -122,7 +122,7 @@ func main() {
  		fmt.Println("ERROR: in net.Listen()")
  	}
 
- 	fmt.Println("Server up and listening on port 6000")
+ 	fmt.Println("Server up and listening on port 8000")
 
  	for {
  		conn, _ := ln.Accept()
@@ -130,7 +130,8 @@ func main() {
  			fmt.Println("ERROR: in Accept()")
  			continue
  		}
- 		goServer.add <- conn
+
+ 	goServer.add <- conn
 
  	}
 }
